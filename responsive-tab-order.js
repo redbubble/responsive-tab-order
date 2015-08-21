@@ -1,28 +1,28 @@
-define('responsive-tab-order', [ 'jquery' ], function($) {
+define('responsive-tab-order', [ 'jquery' ], function ($) {
   var documentTabOrder = 'document';
   var visualTabOrder = 'visual';
 
-  var sameRowTolerance = 16;
+  var defaultSameRowTolerance = 16;
 
 
-  var isDocumentTabOrder = function(tabOrder) {
-    return tabOrder === '' || tabOrder === documentTabOrder;
-  };
-
-  var startAutoUpdate = function() {
+  var startAutoUpdate = function (sameRowTolerance) {
     var resizeTimer;
 
-    updateTabOrder();
+    updateTabOrder(sameRowTolerance);
     
     window.addEventListener('resize', function() {
       clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(updateTabOrder, 500);
+      resizeTimer = setTimeout(function () { updateTabOrder(sameRowTolerance); }, 500);
     });
   };
 
-  var updateTabOrder = function() {
+  var updateTabOrder = function (sameRowTolerance) {
     var tabbables = $('[data-taborder]').get();
     var i;
+
+    if (typeof(sameRowTolerance) !== 'number') {
+      sameRowTolerance = defaultSameRowTolerance;
+    }
 
     tabbables.sort(function (a, b) {
       var offsetA = $(a).offset();
@@ -46,6 +46,11 @@ define('responsive-tab-order', [ 'jquery' ], function($) {
     for (i = 0; i < tabbables.length; ++i) {
       tabbables[i].tabIndex = i + 1;
     }
+  };
+
+
+  var isDocumentTabOrder = function (tabOrder) {
+    return tabOrder === '' || tabOrder === documentTabOrder;
   };
 
 
