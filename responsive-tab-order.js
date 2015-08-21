@@ -33,17 +33,19 @@ define('responsive-tab-order', [ 'jquery' ], function ($) {
 
 
   var findTabbables = function () {
-    var tabbables = $('[data-taborder]').get();
+    var tabbableElements = $('[data-taborder]').get();
+    var tabbables = [];
     var i;
 
-    for (i = 0; i < tabbables.length; ++i) {
-      tabbables[i] = { element: $(tabbables[i]), index: i };
+    for (i = 0; i < tabbableElements.length; ++i) {
+      tabbables.push({ element: tabbableElements[i], index: i });
     }
 
     return tabbables;
   };
 
-  var isDocumentTabOrder = function (tabOrder) {
+  var isDocumentTabOrder = function (element) {
+    var tabOrder = $(element).attr('data-taborder');
     return tabOrder === '' || tabOrder === documentTabOrder;
   };
 
@@ -54,12 +56,12 @@ define('responsive-tab-order', [ 'jquery' ], function ($) {
 
   var tabOrderComparator = function (sameRowTolerance) {
     return function (a, b) {
-      var offsetA = a.element.offset();
-      var offsetB = b.element.offset();
+      var offsetA = $(a.element).offset();
+      var offsetB = $(b.element).offset();
       var topDiff = offsetA.top - offsetB.top;
-      var bottomDiff = (offsetA.top + a.element.height()) - (offsetB.top + b.element.height());
+      var bottomDiff = (offsetA.top + $(a.element).height()) - (offsetB.top + $(b.element).height());
 
-      if (isDocumentTabOrder(a.element.attr('data-taborder')) && isDocumentTabOrder(b.element.attr('data-taborder'))) {
+      if (isDocumentTabOrder(a.element) && isDocumentTabOrder(b.element)) {
         return a.index - b.index;
       }
 
