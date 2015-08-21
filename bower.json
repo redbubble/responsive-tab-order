@@ -1,0 +1,29 @@
+{
+  "name": "responsive-tab-order",
+  "version": "0.1.0",
+  "authors": [
+    "Amanda Koh <amanda.koh@redbubble.com>"
+  ],
+  "description": "JavaScript library for automatically managing keyboard tabbing navigation on responsive pages.",
+  "main": "tab-order.js",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "tab",
+    "a11y",
+    "responsive"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/redbubble/responsive-tab-order",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:redbubble/responsive-tab-order.git"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "tests"
+  ]
+}
