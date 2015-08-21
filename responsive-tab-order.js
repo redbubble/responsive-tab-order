@@ -17,7 +17,7 @@ define('responsive-tab-order', [ 'jquery' ], function ($) {
   };
 
   var updateTabOrder = function (sameRowTolerance) {
-    var tabbables = $('[data-taborder]').get();
+    var tabbables = findTabbables();
     var i;
 
     if (typeof(sameRowTolerance) !== 'number') {
@@ -27,10 +27,21 @@ define('responsive-tab-order', [ 'jquery' ], function ($) {
     tabbables.sort(tabOrderComparator(sameRowTolerance));
 
     for (i = 0; i < tabbables.length; ++i) {
-      tabbables[i].tabIndex = i + 1;
+      tabbables[i].element.tabIndex = i + 1;
     }
   };
 
+
+  var findTabbables = function () {
+    var tabbables = $('[data-taborder]').get();
+    var i;
+
+    for (i = 0; i < tabbables.length; ++i) {
+      tabbables[i] = { element: $(tabbables[i]), index: i };
+    }
+
+    return tabbables;
+  };
 
   var isDocumentTabOrder = function (tabOrder) {
     return tabOrder === '' || tabOrder === documentTabOrder;
@@ -43,13 +54,13 @@ define('responsive-tab-order', [ 'jquery' ], function ($) {
 
   var tabOrderComparator = function (sameRowTolerance) {
     return function (a, b) {
-      var offsetA = $(a).offset();
-      var offsetB = $(b).offset();
+      var offsetA = a.element.offset();
+      var offsetB = b.element.offset();
       var topDiff = offsetA.top - offsetB.top;
-      var bottomDiff = (offsetA.top + $(a).height()) - (offsetB.top + $(b).height());
+      var bottomDiff = (offsetA.top + a.element.height()) - (offsetB.top + b.element.height());
 
-      if (isDocumentTabOrder($(a).attr('data-taborder')) && isDocumentTabOrder($(b).attr('data-taborder'))) {
-        return tabbables.indexOf(a) < tabbables.indexOf(b) ? -1 : 1;
+      if (isDocumentTabOrder(a.element.attr('data-taborder')) && isDocumentTabOrder(b.element.attr('data-taborder'))) {
+        return a.index - b.index;
       }
 
       if (onSameRow(topDiff, bottomDiff, sameRowTolerance)) {
