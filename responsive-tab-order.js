@@ -24,24 +24,7 @@ define('responsive-tab-order', [ 'jquery' ], function ($) {
       sameRowTolerance = defaultSameRowTolerance;
     }
 
-    tabbables.sort(function (a, b) {
-      var offsetA = $(a).offset();
-      var offsetB = $(b).offset();
-      var topDiff = offsetA.top - offsetB.top;
-      var bottomDiff = (offsetA.top + $(a).height()) - (offsetB.top + $(b).height());
-
-      if (isDocumentTabOrder($(a).attr('data-taborder')) && isDocumentTabOrder($(b).attr('data-taborder'))) {
-        return tabbables.indexOf(a) < tabbables.indexOf(b) ? -1 : 1;
-      }
-
-      if ((topDiff <= sameRowTolerance && bottomDiff >= -sameRowTolerance) ||
-          (topDiff >= -sameRowTolerance && bottomDiff <= sameRowTolerance))
-      {
-        return offsetA.left - offsetB.left;
-      }
-
-      return topDiff;
-    });
+    tabbables.sort(tabOrderComparator(sameRowTolerance));
 
     for (i = 0; i < tabbables.length; ++i) {
       tabbables[i].tabIndex = i + 1;
@@ -51,6 +34,30 @@ define('responsive-tab-order', [ 'jquery' ], function ($) {
 
   var isDocumentTabOrder = function (tabOrder) {
     return tabOrder === '' || tabOrder === documentTabOrder;
+  };
+
+  var onSameRow = function (topDiff, bottomDiff, sameRowTolerance) {
+      return (topDiff <= sameRowTolerance && bottomDiff >= -sameRowTolerance) ||
+        (topDiff >= -sameRowTolerance && bottomDiff <= sameRowTolerance);
+  };
+
+  var tabOrderComparator = function (sameRowTolerance) {
+    return function (a, b) {
+      var offsetA = $(a).offset();
+      var offsetB = $(b).offset();
+      var topDiff = offsetA.top - offsetB.top;
+      var bottomDiff = (offsetA.top + $(a).height()) - (offsetB.top + $(b).height());
+
+      if (isDocumentTabOrder($(a).attr('data-taborder')) && isDocumentTabOrder($(b).attr('data-taborder'))) {
+        return tabbables.indexOf(a) < tabbables.indexOf(b) ? -1 : 1;
+      }
+
+      if (onSameRow(topDiff, bottomDiff, sameRowTolerance)) {
+        return offsetA.left - offsetB.left;
+      }
+
+      return topDiff;
+    };
   };
 
 
