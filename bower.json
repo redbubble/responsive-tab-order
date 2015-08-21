@@ -5,7 +5,7 @@
     "Amanda Koh <amanda.koh@redbubble.com>"
   ],
   "description": "JavaScript library for automatically managing keyboard tabbing navigation on responsive pages.",
-  "main": "tab-order.js",
+  "main": "responsive-tab-order.js",
   "moduleType": [
     "node"
   ],

@@ -1,4 +1,4 @@
-define('services/tab-order', [ 'jquery' ], function($) {
+define('responsive-tab-order', [ 'jquery' ], function($) {
   var documentTabOrder = 'document';
   var visualTabOrder = 'visual';
 
