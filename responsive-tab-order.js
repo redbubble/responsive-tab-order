@@ -1,4 +1,5 @@
-define('responsive-tab-order', [ 'jquery' ], function ($) {
+var ResponsiveTabOrder = (function (module) {
+
   var documentTabOrder = 'document';
   var visualTabOrder = 'visual';
 
@@ -12,7 +13,7 @@ define('responsive-tab-order', [ 'jquery' ], function ($) {
     
     window.addEventListener('resize', function() {
       clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(function () { updateTabOrder(sameRowTolerance); }, 500);
+      resizeTimer = setTimeout(function () { updateTabOrder(sameRowTolerance); }, 250);
     });
   };
 
@@ -33,7 +34,7 @@ define('responsive-tab-order', [ 'jquery' ], function ($) {
 
 
   var findTabbables = function () {
-    var tabbableElements = $('[data-taborder]').get();
+    var tabbableElements = document.querySelectorAll('[data-taborder]');
     var tabbables = [];
     var i;
 
@@ -44,8 +45,27 @@ define('responsive-tab-order', [ 'jquery' ], function ($) {
     return tabbables;
   };
 
+  var tabOrderComparator = function (sameRowTolerance) {
+    return function (a, b) {
+      var boundA = a.element.getBoundingClientRect();
+      var boundB = b.element.getBoundingClientRect();
+      var topDiff = boundA.top - boundB.top;
+      var bottomDiff = boundA.bottom - boundB.bottom;
+
+      if (isDocumentTabOrder(a.element) && isDocumentTabOrder(b.element)) {
+        return a.index - b.index;
+      }
+
+      if (onSameRow(topDiff, bottomDiff, sameRowTolerance)) {
+        return boundA.left - boundB.left;
+      }
+
+      return topDiff;
+    };
+  };
+
   var isDocumentTabOrder = function (element) {
-    var tabOrder = $(element).attr('data-taborder');
+    var tabOrder = element.attributes['data-taborder'];
     return tabOrder === '' || tabOrder === documentTabOrder;
   };
 
@@ -54,30 +74,21 @@ define('responsive-tab-order', [ 'jquery' ], function ($) {
         (topDiff >= -sameRowTolerance && bottomDiff <= sameRowTolerance);
   };
 
-  var tabOrderComparator = function (sameRowTolerance) {
-    return function (a, b) {
-      var offsetA = $(a.element).offset();
-      var offsetB = $(b.element).offset();
-      var topDiff = offsetA.top - offsetB.top;
-      var bottomDiff = (offsetA.top + $(a.element).height()) - (offsetB.top + $(b.element).height());
 
-      if (isDocumentTabOrder(a.element) && isDocumentTabOrder(b.element)) {
-        return a.index - b.index;
-      }
 
-      if (onSameRow(topDiff, bottomDiff, sameRowTolerance)) {
-        return offsetA.left - offsetB.left;
-      }
-
-      return topDiff;
+  if (!module) {
+    module = {
+      startAutoUpdate: startAutoUpdate,
+      updateTabOrder: updateTabOrder
     };
-  };
 
-
-  var module = {
-    startAutoUpdate: startAutoUpdate,
-    updateTabOrder: updateTabOrder
-  };
+    if (typeof define === 'function' && define.amd) {
+      define('responsive-tab-order', [], function () {
+        return module;
+      });
+    }
+  }
 
   return module;
-});
+
+})(ResponsiveTabOrder);
