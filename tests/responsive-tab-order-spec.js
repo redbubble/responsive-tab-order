@@ -49,6 +49,10 @@ describe('ResponsiveTabOrder', function () {
 
     describe('for document ordering', function () {
 
+      it('gives a lower tabindex to elements appearing earlier in the DOM', function () {
+        expect(tabIndexFor('[data-low-div-4][data-taborder="document"]')).toBeLessThan(tabIndexFor('[data-high-div-4][data-taborder="document"]'));
+      });
+
       it('treats elements with empty data-taborder as document order', function () {
         expect(tabIndexFor('[data-low-div-3][data-taborder=""]')).toBeLessThan(tabIndexFor('[data-high-div-3][data-taborder=""]'));
       });
