@@ -1,16 +1,17 @@
 {
   "name": "responsive-tab-order",
-  "version": "0.1.0",
+  "description": "JavaScript library for automatically managing keyboard tabbing navigation on responsive pages.",
   "authors": [
     "Amanda Koh <amanda.koh@redbubble.com>"
   ],
-  "description": "JavaScript library for automatically managing keyboard tabbing navigation on responsive pages.",
   "main": "responsive-tab-order.js",
   "moduleType": [
-    "node"
+    "globals",
+    "amd"
   ],
   "keywords": [
     "tab",
+    "tabindex",
     "a11y",
     "responsive"
   ],
@@ -22,8 +23,10 @@
   },
   "ignore": [
     "**/.*",
-    "node_modules",
     "bower_components",
     "tests"
-  ]
+  ],
+  "devDependencies": {
+    "jasmine": "~2.3.4"
+  }
 }
