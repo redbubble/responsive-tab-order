@@ -46,5 +46,12 @@ describe('ResponsiveTabOrder', function () {
 
       });
     });
+
+    describe('for document ordering', function () {
+
+      it('treats elements with empty data-taborder as document order', function () {
+        expect(tabIndexFor('[data-low-div-3][data-taborder=""]')).toBeLessThan(tabIndexFor('[data-high-div-3][data-taborder=""]'));
+      });
+    });
   });
 });
