@@ -65,7 +65,7 @@ var ResponsiveTabOrder = (function (module) {
   };
 
   var isDocumentTabOrder = function (element) {
-    var tabOrder = element.attributes['data-taborder'];
+    var tabOrder = element.attributes['data-taborder'].value;
     return tabOrder === '' || tabOrder === documentTabOrder;
   };
 
