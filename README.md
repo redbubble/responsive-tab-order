@@ -15,9 +15,7 @@ Because responsive Web design is generally a Good Thing, but sometimes causes in
 
 ## Using
 
-`responsive-tab-order` is a [Bower](http://bower.io) package.
-
-1. Add it to your application using:
+1. `responsive-tab-order` is available as a [Bower](http://bower.io) package. Add it to your application using:
 
   `bower install -S 'git@github.com:redbubble/responsive-tab-order.git#master'`
 
