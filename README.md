@@ -3,6 +3,16 @@
 Simple JavaScript library for dynamically managing keyboard navigation order (tab order) on responsive Web pages.
 
 
+## Why
+
+Because responsive Web design is generally a Good Thing, but sometimes causes interactive elements to be rearranged, and [not everyone can use a mouse](http://a11yproject.com/posts/myth-accessibility-is-blind-people/).
+
+
+## How
+
+`responsive-tab-order` works by dynamically updating the `tabindex` attribute of marked elements, which can either be given a visual ordering (currently, only top-to-bottom/left-to-right is supported) or a standard document ordering. A page can contain a mixture of visually ordered and document ordered elements (but not all positionings make sense in an unambiguous way).
+
+
 ## Using
 
 `responsive-tab-order` is a [Bower](http://bower.io) package.
@@ -11,7 +21,7 @@ Simple JavaScript library for dynamically managing keyboard navigation order (ta
 
   `bower install -S 'git@github.com:redbubble/responsive-tab-order.git#master'`
 
-2. Add a `data-taborder` attribute to each element on your page that should receive focus. The value of the attribute can be `visual` or `document` (or blank, which is the same as `document`). When set to `visual`, an element is placed in the tab order by its visual positioning relative to other focusable elements (currently, only top-to-bottom/left-to-right is supported). When set to `document`, an element is placed in the tab order according to its position in the DOM.
+2. Add a `data-taborder` attribute to each element on your page that should receive focus. The value of the attribute can be `visual` or `document` (or blank, which is the same as `document`). When set to `visual`, an element is placed in the tab order by its visual positioning relative to other focusable elements. When set to `document`, an element is placed in the tab order according to its position in the DOM.
 
 3. Let `responsive-tab-order` manage the tab order by including the following on your page:
 
