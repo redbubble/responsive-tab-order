@@ -31,7 +31,7 @@ Because responsive Web design is generally a Good Thing, but sometimes causes in
         ResponsiveTabOrder.startAutoUpdate();
       });
 
-  You can pass in a pixel distance threshold for elements to be considered "on the same line" (the default is 16):
+  You can pass in a pixel distance threshold for elements to be considered "on the same line" (the default is 0):
   
     `ResponsiveTabOrder.startAutoUpdate(32);`
 

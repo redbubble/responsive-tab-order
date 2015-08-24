@@ -3,8 +3,6 @@ var ResponsiveTabOrder = (function (module) {
   var documentTabOrder = 'document';
   var visualTabOrder = 'visual';
 
-  var defaultSameRowTolerance = 16;
-
 
   var startAutoUpdate = function (sameRowTolerance) {
     var resizeTimer;
@@ -22,7 +20,7 @@ var ResponsiveTabOrder = (function (module) {
     var i;
 
     if (typeof(sameRowTolerance) !== 'number') {
-      sameRowTolerance = defaultSameRowTolerance;
+      sameRowTolerance = 0;
     }
 
     tabbables.sort(tabOrderComparator(sameRowTolerance));
@@ -47,20 +45,11 @@ var ResponsiveTabOrder = (function (module) {
 
   var tabOrderComparator = function (sameRowTolerance) {
     return function (a, b) {
-      var boundA = a.element.getBoundingClientRect();
-      var boundB = b.element.getBoundingClientRect();
-      var topDiff = boundA.top - boundB.top;
-      var bottomDiff = boundA.bottom - boundB.bottom;
-
       if (isDocumentTabOrder(a.element) && isDocumentTabOrder(b.element)) {
         return a.index - b.index;
       }
 
-      if (onSameRow(topDiff, bottomDiff, sameRowTolerance)) {
-        return boundA.left - boundB.left;
-      }
-
-      return topDiff;
+      return compareByVisualPosition(a, b, sameRowTolerance);
     };
   };
 
@@ -69,11 +58,27 @@ var ResponsiveTabOrder = (function (module) {
     return tabOrder === '' || tabOrder === documentTabOrder;
   };
 
-  var onSameRow = function (topDiff, bottomDiff, sameRowTolerance) {
-      return (topDiff <= sameRowTolerance && bottomDiff >= -sameRowTolerance) ||
-        (topDiff >= -sameRowTolerance && bottomDiff <= sameRowTolerance);
+  var compareByVisualPosition = function (a, b, sameRowTolerance) {
+    var boundA = a.element.getBoundingClientRect();
+    var boundB = b.element.getBoundingClientRect();
+
+    if (areVerticallyOverlapping(boundA, boundB, sameRowTolerance)) {
+      return boundA.left - boundB.left;
+    }
+
+    return boundA.top - boundB.top;
   };
 
+  var areVerticallyOverlapping = function (boundA, boundB, sameRowTolerance) {
+    return verticallyContains(boundA.top, boundB, sameRowTolerance) ||
+      verticallyContains(boundA.bottom, boundB, sameRowTolerance) ||
+      verticallyContains(boundB.top, boundA, sameRowTolerance) ||
+      verticallyContains(boundB.bottom, boundA, sameRowTolerance);
+  };
+
+  var verticallyContains = function (pos, bound, sameRowTolerance) {
+    return pos >= bound.top - sameRowTolerance && pos <= bound.bottom + sameRowTolerance;
+  };
 
 
   if (!module) {
