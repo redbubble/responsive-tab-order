@@ -17,7 +17,9 @@ Because responsive Web design is generally a Good Thing, but sometimes causes in
 
 1. `responsive-tab-order` is available as a [Bower](http://bower.io) package. Add it to your application using:
 
-  `bower install -S 'git@github.com:redbubble/responsive-tab-order.git#master'`
+    `bower install -S 'git@github.com:redbubble/responsive-tab-order.git#master'`
+
+  Alternatively, just include `responsive-tab-order.js` in your page using whatever means works best for you.
 
 2. Add a `data-taborder` attribute to each element on your page that should receive focus. The value of the attribute can be `visual` or `document` (or blank, which is the same as `document`). When set to `visual`, an element is placed in the tab order by its visual positioning relative to other focusable elements. When set to `document`, an element is placed in the tab order according to its position in the DOM.
 
